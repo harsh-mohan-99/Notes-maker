@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Maker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #4C1A57;
+        }
+
+        ::selection {
+            color: white;
+            background: rgba(74, 74, 231, 0.795);
+        }
+
+        h1 {
+            color: #F0F600;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 60px;
+        }
+
+        div.container {
+            margin: 50px auto;
+            width: 800px;
+            height: 500px;
+            background: rgba(253, 248, 248, 0.877);
+            border-radius: 15px;
+            padding: 1px;
+            box-shadow: 0px 5px 20px black;
+        }
+
+        div.header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        input {
+            width: 330px;
+            height: 38px;
+            padding-left: 15px;
+            outline: none;
+            border: none;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            box-shadow: 0px 0px 5px black;
+        }
+
+        button.create {
+            margin-left: -1px;
+            width: 80px;
+            height: 38px;
+            border: none;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: white;
+            background: #007C77;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px black;
+
+        }
+
+        button.create:active {
+            background: #e21aa9;
+        }
+
+        button.data-clr {
+            padding: 10px;
+            margin-left: 80px;
+            cursor: pointer;
+            background: rgb(233, 210, 210);
+        }
+
+        button.data-clr:active {
+            background: rgb(180, 173, 173);
+        }
+
+        div.notes {
+            overflow: auto;
+            margin: 30px auto;
+            width: 700px;
+            height: 370px;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-evenly;
+        }
+        footer{
+            width: 100%;
+            height: 30px;
+            text-align: center;
+            background: wheat;
+            position: absolute;
+            bottom: 0px;
+        }
+
+        @media (max-width:400px) {
+            div.container {
+                border-radius: 0px;
+                width: 100%;
+                margin: 0px;
+
+            }
+
+            div.header {
+                flex-wrap: wrap;
+            }
+
+            input {
+                border-radius: 0px;
+            }
+
+            button.create {
+                margin: 8px;
+                border-radius: 0px;
+                display: inline-block;
+                box-shadow: 1px 1px 3px black;
+                width: 30%;
+            }
+
+            button.data-clr {
+                display: inline-block;
+                background: rgba(255, 0, 0, 0.575);
+                color: white;
+                font-size: 15px;
+                border: none;
+                box-shadow: 1px 1px 3px black;
+            }
+
+            div.notes {
+                width: 100%;
+                margin-top: 7px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <main>
+
+        <h1>Notes Maker</h1>
+        <div class="container">
+            <div class="header">
+                <input type="text" placeholder="Enter Note Here" title="Enter your desired text into this box add as a note">
+                <button class="create" title="This button creates notes">create</button>
+                <button class="data-clr" title="This button clears all the data">Clear All</button>
+            </div>
+            <div class="notes"></div>
+        </div>
+        <footer>
+            Its created by <a href="#">Harsh Sahni</a>
+        </footer>
+
+    </main>
+    <script>
+        let input = document.querySelector('input');
+        let notes_data = document.querySelector('.notes');
+        let btn = document.querySelector('.create');
+        let clrbtn = document.querySelector('.data-clr');
+        let name = '1';
+
+        btn.addEventListener('click', function details() {
+            let obj = {
+                data: input.value
+            }
+            localStorage.setItem(name, JSON.stringify(obj));
+            let text = JSON.parse(localStorage.getItem(name));
+            if (input.value == '') {
+                alert("Can't create!!Please enter some notes first");
+            }
+            else {
+                name = Number(name) + 1;
+                let note = document.createElement('div');
+                let data = document.createElement('textarea');
+                let box = document.createElement('div');
+                note.style.width = '150px';
+                note.style.height = '100px';
+                note.style.wordWrap = 'break-word';
+                note.style.borderRadius = '5px';
+                note.style.display = 'flex';
+                note.style.alignItems = 'center';
+                note.style.justifyContent = 'space-evenly';
+                note.style.background = "white";
+                note.style.border = '1px solid black';
+                note.style.overflow = 'hidden';
+                note.style.marginBottom = '30px';
+
+                data.innerText = text.data;
+                data.style.width = '110px';
+                data.style.height = '100px';
+                data.style.padding = '5px';
+                data.style.resize = 'none';
+                data.style.background = 'none';
+                data.style.outline = 'none';
+                data.style.border = 'none';
+                data.setAttribute('maxlength', '70');
+                data.overflowY = 'auto';
+
+                box.style.display = 'flex';
+                box.style.flexWrap = 'wrap';
+                box.style.alignItems = 'center';
+                box.style.width = '30px';
+                box.style.height = '80px';
+                box.style.marginRight = '5px';
+
+                note.appendChild(data);
+                let del = document.createElement('button');
+                let update = document.createElement('button');
+                del.style.width = '30px';
+                del.style.height = '30px';
+                del.innerText = 'DE';
+                del.style.cursor = 'pointer';
+                del.setAttribute('title','Press this button to delete this note');
+                del.addEventListener('click', function delet() {
+                    note.remove();
+                    localStorage.removeItem(name - 1);
+                });
+                box.appendChild(del);
+                update.style.width = '30px';
+                update.style.height = '30px';
+                update.innerText = 'up';
+                update.style.textTransform = "Uppercase";
+                update.style.cursor = 'pointer';
+                update.setAttribute('title','Click this button to be able to update your note');
+
+                data.readOnly = true;
+                update.addEventListener('click', function upd() {
+                    data.readOnly = data.readOnly === true ? false : true;
+                    let store = data.value;
+                    text.data = store;
+                    localStorage.setItem(name - 1, JSON.stringify(text));
+                    if (data.readOnly == true) {
+                        alert('Note updated!');
+                    }
+                })
+                notes_data.appendChild(note);
+                box.appendChild(update);
+                note.appendChild(box);
+                input.value = '';
+            }
+        });
+        clrbtn.addEventListener('click', function del_all() {
+            localStorage.clear();
+            alert('Data cleared!! Refresh Now!');
+        });
+
+    </script>
+</body>
+
+</html>
